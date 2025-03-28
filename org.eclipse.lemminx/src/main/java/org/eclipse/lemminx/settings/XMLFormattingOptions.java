@@ -38,6 +38,8 @@ public class XMLFormattingOptions extends org.eclipse.lemminx.settings.LSPFormat
 
 	public static final boolean DEFAULT_PRESERVE_ATTR_LINE_BREAKS = true;
 
+	public static final boolean DEFAULT_PRESERVE_ATTR_WHITESPACE = false;
+
 	public static final boolean DEFAULT_TRIM_TRAILING_SPACES = false;
 
 	public static final int DEFAULT_SPLIT_ATTRIBUTES_INDENT_SIZE = 2;
@@ -74,6 +76,7 @@ public class XMLFormattingOptions extends org.eclipse.lemminx.settings.LSPFormat
 	private String enforceQuoteStyle;
 
 	private boolean preserveAttributeLineBreaks;
+	private boolean preserveAttributeWhitespace;
 	private boolean preserveEmptyContent;
 	private int splitAttributesIndentSize;
 	private boolean closingBracketNewLine;
@@ -170,6 +173,7 @@ public class XMLFormattingOptions extends org.eclipse.lemminx.settings.LSPFormat
 		this.setXsiSchemaLocationSplit(DEFAULT_XSI_SCHEMA_LOCATION_SPLIT);
 		this.setClosingBracketNewLine(DEFAULT_CLOSING_BRACKET_NEW_LINE);
 		this.setPreserveAttributeLineBreaks(DEFAULT_PRESERVE_ATTR_LINE_BREAKS);
+		this.setPreserveAttributeWhitespace(DEFAULT_PRESERVE_ATTR_WHITESPACE);
 		this.setPreserveSpace(DEFAULT_PRESERVE_SPACE);
 		this.setGrammarAwareFormatting(true);
 	}
@@ -366,6 +370,26 @@ public class XMLFormattingOptions extends org.eclipse.lemminx.settings.LSPFormat
 	}
 
 	/**
+	 * Sets the value of preserveAttrWhitespace
+	 */
+	public void setPreserveAttributeWhitespace(final boolean preserveAttributeWhitespace) {
+		this.preserveAttributeWhitespace = preserveAttributeWhitespace;
+	}
+
+	/**
+	 * Returns the value of preserveAttrWhitespace
+	 *
+	 * @return the value of preserveAttrWhitespace
+	 */
+	public boolean isPreserveAttributeWhitespace() {
+		if (this.getSplitAttributes() != SplitAttributes.preserve) {
+			// splitAttributes overrides preserveAttrWhitespace
+			return false;
+		}
+		return preserveAttributeWhitespace;
+	}
+
+	/**
 	 * Sets the value of splitAttributesIndentSize
 	 *
 	 * @param splitAttributesIndentSize the new value for splitAttributesIndentSize
@@ -459,6 +483,7 @@ public class XMLFormattingOptions extends org.eclipse.lemminx.settings.LSPFormat
 		setPreservedNewlines(formattingOptions.getPreservedNewlines());
 		setEnforceQuoteStyle(formattingOptions.getEnforceQuoteStyle());
 		setPreserveAttributeLineBreaks(formattingOptions.isPreserveAttributeLineBreaks());
+		setPreserveAttributeWhitespace(formattingOptions.isPreserveAttributeWhitespace());
 		setPreserveEmptyContent(formattingOptions.isPreserveEmptyContent());
 		setSplitAttributesIndentSize(formattingOptions.getSplitAttributesIndentSize());
 		setClosingBracketNewLine(formattingOptions.getClosingBracketNewLine());

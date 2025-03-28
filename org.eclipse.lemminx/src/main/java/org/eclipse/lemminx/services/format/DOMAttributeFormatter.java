@@ -43,18 +43,22 @@ public class DOMAttributeFormatter {
 		// --> <foo[space]attr=""
 		boolean alreadyIndented = false;
 		if (useSettings) {
-			// move the attribute to a new line and indent it
-			if (isPreserveAttributeLineBreaks() && hasLineBreak(prevOffset, attr.getStart())) {
-				replaceLeftSpacesWithIndentation(indentLevel + 1, prevOffset, attr.getStart(), true, edits);
+			if (isPreserveAttributeWhitespace()) {
 				alreadyIndented = true;
-			} else if (getSplitAttributes() == SplitAttributes.splitNewLine && !singleAttribute) {
-				replaceLeftSpacesWithIndentation(indentLevel + getSplitAttributesIndentSize(), prevOffset,
-						attr.getStart(), true, edits);
-				alreadyIndented = true;
-			} else if (getSplitAttributes() == SplitAttributes.alignWithFirstAttr && !isFirstAttr) {
-				replaceLeftSpacesWithIndentationWithOffsetSpaces(getFirstAttrOffset(attr.getOwnerElement(), indentLevel), prevOffset,
-						attr.getStart(), edits);
-				alreadyIndented = true;
+			} else {
+				// move the attribute to a new line and indent it
+				if (isPreserveAttributeLineBreaks() && hasLineBreak(prevOffset, attr.getStart())) {
+					replaceLeftSpacesWithIndentation(indentLevel + 1, prevOffset, attr.getStart(), true, edits);
+					alreadyIndented = true;
+				} else if (getSplitAttributes() == SplitAttributes.splitNewLine && !singleAttribute) {
+					replaceLeftSpacesWithIndentation(indentLevel + getSplitAttributesIndentSize(), prevOffset,
+							attr.getStart(), true, edits);
+					alreadyIndented = true;
+				} else if (getSplitAttributes() == SplitAttributes.alignWithFirstAttr && !isFirstAttr) {
+					replaceLeftSpacesWithIndentationWithOffsetSpaces(getFirstAttrOffset(attr.getOwnerElement(), indentLevel), prevOffset,
+							attr.getStart(), edits);
+					alreadyIndented = true;
+				}
 			}
 		}
 
@@ -179,6 +183,10 @@ public class DOMAttributeFormatter {
 
 	boolean isPreserveAttributeLineBreaks() {
 		return formatterDocument.getSharedSettings().getFormattingSettings().isPreserveAttributeLineBreaks();
+	}
+
+	private boolean isPreserveAttributeWhitespace() {
+		return formatterDocument.getSharedSettings().getFormattingSettings().isPreserveAttributeWhitespace();
 	}
 
 	private boolean hasLineBreak(int prevOffset, int start) {
